@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+    <div>
+        <input type="checkbox" data-id="1" />Test
+    </div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+    <script>
+ /*       $(function() {
+            $.getJSON("/todo/getlist", function(res) {
+
+                //var html = '<div class="' + res.status + '"><input type="checkbox" data-idx="' + res.id + '" />' +  res.description + '</div>';
+                //$("div").append(html);
+                console.log(res);
+            });
+        });*/
+        var TodoItem = Backbone.Model.extend({urlRoot : "todos"});  //Create model
+/*        var todoItem = new TodoItem(
+            { description: 'Pick up milk', status: 'incomplete', id: 1 }
+        );                                      //model instance 생성*/
+
+        var todoItem = new TodoItem({id : 3});
+        var options = {};
+        options.success = function(model, response, options) {
+             console.log(model);
+             console.log(response);
+             console.log(options);
+
+             console.log(todoItem.get("description"));
+
+            //todoItem.destroy();
+            todoItem.set({description : "ZZZZZZ"});
+            todoItem.save();
+
+            var insertTodo = new TodoItem({description: 'insert Test', status: 'incomplete'});
+            insertTodo.save();
+
+            todoItem.on("change", function() {
+                this.save();
+            });
+
+            todoItem.set({description : "AAAAAA"});
+            todoItem.set({description : "QQQQQQ"}, {silent : true});
+        };
+
+        //todoItem.url = '/todos/3?' + (+new Date());
+        console.log(todoItem);
+        todoItem.fetch(options);
+
+
+        console.log(todoItem.get("status"));         //incomplete
+        //todoItem.set({status : "complete"});    //status 값이 complete 로 변경
+        //todoItem.save();                        //서버와 동기화 이건 나중에 다시 봅시다.
+
+        var TodoItemView = Backbone.View.extend({
+            render : function() {
+                var html = '<input type="checkbox" data-idx="' + this.model.get("id") + '" />' +  this.model.get("description");
+
+                $(this.el).addClass(this.model.get("status")).html(html);   //모든 View는 top Level Element 를 가진다. 기본 값은 div
+                                                                             //<div>.......</div>
+            }
+        });
+        var todoItemView = new TodoItemView({
+            model : todoItem
+        });
+
+        todoItemView.render();
+        console.log(todoItemView.el);
+
+        $("div").append(todoItemView.el);
+    </script>
+</body>
+</html>
