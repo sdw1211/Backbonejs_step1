@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .complete {
+            color: #bbb;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script type="text/javascript">
+    $(function() {
+//        var TodoItem = Backbone.Model.extend({});
+//
+//        var TodoList = Backbone.Collection.extend({ model : TodoItem});
+//
+//        var todoItem1 = new TodoItem({id:1, description:"aaaa", status:"complete"});
+//        var todoItem2 = new TodoItem({id:2, description :"a222aa", status : "complete"});
+//
+//        var todoList = new TodoList();
+//
+//        todoList.add(todoItem1);
+//        todoList.add(todoItem2);
+//
+//        console.log(todoList.length);
+//        console.log(todoList.at(0));
+//        console.log(todoList.get(1));
+//
+//        todoList.remove(todoItem1);
+//        console.log(todoList.length);
+//
+//        var todos = [
+//            {id:1, description:"aaaa", status:"complete"},
+//            {id:2, description:"aaaa111", status:"complete"},
+//            {id:3, description:"aaaa222", status:"complete"}
+//        ];
+//
+//        todoList.reset(todos);
+//        console.log(todoList.length);
+
+        var TodoList = Backbone.Collection.extend({
+            url : "/todos"
+        });
+
+        var todoList = new TodoList();
+        var options = {};
+        options.success = function(model, response, options) {
+            console.log(todoList);
+        };
+        todoList.fetch(options);
+
+
+    });
+</script>
+</body>
+</html>

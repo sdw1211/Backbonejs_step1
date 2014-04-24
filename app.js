@@ -28,13 +28,28 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/todos/:id', todo.getOne);
+app.get('/todos', todo.getAll);
 app.put('/todos/:id', todo.update);
 app.delete('/todos/:id', todo.delete);
 app.post('/todos', todo.insert);
 
 app.get('/todoData', todo.getTestOne);
-app.get('/todo', todo.index);
 
+app.get('/todo', function(req, res) {
+    res.sendfile(__dirname + '/views/todo.html');
+});
+app.get('/todo2', function(req, res) {
+    res.sendfile(__dirname + '/views/todo2.html');
+});
+app.get('/todo3', function(req, res) {
+    res.sendfile(__dirname + '/views/todo3.html');
+});
+app.get('/todo4', function(req, res) {
+    res.sendfile(__dirname + '/views/todo4.html');
+});
+app.get('/todo5', function(req, res) {
+    res.sendfile(__dirname + '/views/todo5.html');
+});
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

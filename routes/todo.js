@@ -61,6 +61,11 @@ exports.getOne = function(req, res){
     var todo = search(req.param("id"));
     res.send(todo.todo || {});
 };
+
+exports.getAll = function(req, res){
+    res.send(todos);
+};
+
 exports.index = function(req, res) {
     res.render("todo");
 };

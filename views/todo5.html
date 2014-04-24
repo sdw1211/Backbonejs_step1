@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .complte {
+            color : #bbb;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<div id="app">
+
+</div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script>
+    $(function() {
+        var Todo = Backbone.Model.extend({
+            parse : function(response) {
+                response.todo.desc = response.todo.desa;
+                delete response.todo.desa;
+                return response.todo;
+            },
+            toJSON : function() {
+                //{id :1 , name : "aaaa", desc: "ccccc"}
+                //todo : {id :1 , name : "aaaa", desa: "ccccc"}
+
+                var clone = _.clone(this.attributes);
+                clone.desa = clone.desc;
+                var v = _.pick(clone, "id", "name", "desc")
+
+                return {todo : v} ;
+            }
+
+        });
+
+        var todo = new Todo({
+            todo : {id :1 , name : "aaaa", desa: "ccccc"}
+
+        },{parse:true});
+
+
+        console.log(todo);
+        console.log(todo.toJSON());
+
+    });
+</script>
+</body>
+</html>

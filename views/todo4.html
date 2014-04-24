@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+<body>
+<div id="app">
+</div>
+
+
+<div>
+    <a href="#delete-1">delete</a>
+
+</div>
+</body>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script>
+    $(function() {
+
+        var TodoItem = Backbone.Model.extend({
+            urlRoot : "/todos",
+            toogleStatus : function() {
+                if (this.get("status") === "complete") {
+                    this.set("status", "incomplete");
+                } else {
+                    this.set("status", "complete");
+                }
+                this.save();
+            }
+        });
+
+        var TodoItemList = Backbone.Collection.extend({
+            url : "/todos",
+            model :  TodoItem
+         });
+
+        var todoItemList = new TodoItemList({
+
+        });
+
+
+        var TodoView = Backbone.View.extend({
+            template : _.template("<h3 class='<%= status%>'><input type='checkbox' <% if(status == 'complete') print('checked') %>/><%= description %></h3><a href='#todos-<%= id %>' class='todo'>aaaa</a>"),
+            events : {
+                "change input" : "toogleStatus"
+            },
+            initialize : function() {
+                this.model.on("change", this.render, this);
+            },
+            toogleStatus : function() {
+
+                this.model.toogleStatus();
+            },
+            render : function() {
+                this.$el.html(this.template(this.model.toJSON()));
+                return this;
+            }
+        });
+
+        var TodoListView = Backbone.View.extend({
+            initialize : function() {
+                this.collection.on("add", this.addOne, this);
+                this.collection.on("reset", this.addAll, this);
+            },
+            addOne : function(todoItem) {
+                var todoView = new TodoView({model : todoItem});
+                this.$el.append(todoView.render().el);
+            },
+            addAll : function() {
+                this.collection.forEach(this.addOne, this);
+            },
+            render : function() {
+                this.addAll();
+            }
+        });
+
+        todoItemList.fetch({
+            success : function() {
+
+
+                var Workspace = Backbone.Router.extend({
+                    routes : {"delete-:id": "index"},
+                    index : function(id) {
+                        console.log("!!!!");
+                        alert(id);
+
+                        model.delete(id);
+                    }
+                });
+
+                router.navigate("delete-1", {trigger : true, replace : true});  --/aaaa#delete-1
+
+                /aaaa#ddwojdwoj
+                var router = new Workspace();
+                Backbone.history.start();
+
+                var todoListView = new TodoListView({collection : todoItemList});
+                todoListView.render();
+                $("#app").html(todoListView.el);
+
+            }
+        });
+
+    });
+
+
+</script>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <style type="text/css">
+        .complete {
+            color: #bbb;
+            text-decoration: line-through;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/1.1.2/backbone-min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var TodoItem = Backbone.Model.extend({
+            urlRoot : "/todos",
+            toogleStatus : function() {
+                if (this.get("status") === "complete") {
+                    this.set("status", "incomplete");
+                } else {
+                    this.set("status", "complete");
+                }
+                this.save();
+            }
+        });
+
+        var todoItem = new TodoItem({id:1});
+        //var todoItem = new TodoItem({id:1, description :"aaaaa", status : "complete"});
+
+        var TodoView = Backbone.View.extend({
+            template : _.template("<h3 class='<%= status%>'><input type='checkbox' <% if(status == 'complete') print('checked') %>/><%= description %></h3>"),
+            events : {
+                "change input" : "toogleStatus"
+            },
+            initialize : function() {
+                this.model.on("change", this.render, this);
+            },
+            toogleStatus : function() {
+
+                this.model.toogleStatus();
+            },
+            render : function() {
+                console.log(this);
+                this.$el.html(this.template(this.model.toJSON()));
+            }
+        });
+
+        var options = {};
+        options.success = function(model, response, options) {
+            var todoView = new TodoView({model : todoItem});
+            todoView.render();
+            console.log(todoView.el);
+            $("#app").html(todoView.el);
+        };
+
+        todoItem.fetch(options);
+
+    });
+</script>
+</body>
+</html>
